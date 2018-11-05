@@ -41,12 +41,13 @@ function Room:draw()
     end
 
     camera:detach()
-
+    camera:draw()
+    
     graphics.setCanvas()
 
     graphics.setColor(1, 1, 1, 1)
     graphics.setBlendMode('alpha', 'premultiplied')
-    graphics.draw(self.main_canvas, 0, 0, 0, sx, sy)
+    graphics.draw(self.mainCanvas, 0, 0, 0, sx, sy)
     graphics.setBlendMode('alpha')
 end
 

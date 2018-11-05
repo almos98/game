@@ -21,12 +21,20 @@ function love.load(args)
     util.requireFiles(util.recursiveEnumerate('objects'))
     util.requireFiles(util.recursiveEnumerate('rooms'))
 
+    love.graphics.setDefaultFilter('nearest')
+    love.graphics.setLineStyle('rough')
+    resize(3)
+
     input   = Input()
     timer   = Timer()
-    camera  = Camera()
 
-    gw,gh = love.graphics.getDimensions()
-    sx,sy = 1,1
+    camera  = Camera(200, 150, 400, 300)
+    camera:setFollowStyle("SCREEN_BY_SCREEN")
+    camera:setFollowLerp(0.2)
+    camera:setFollowLead(10)
+
+    gotoRoom('Stage')
+    player = currentRoom:getGameObjects(function(o) return o:is(Player) end)[1]
 end
 
 ---------------------
@@ -35,7 +43,8 @@ end
 function love.update(dt)
     timer:update(dt)
     camera:update(dt)
-
+    
+    camera:follow(player.x, player.y)
     if currentRoom then
         currentRoom:update(dt)
     end
@@ -57,4 +66,10 @@ end
 function gotoRoom(roomType, ...)
     if currentRoom then currentRoom:destroy() end
     currentRoom = _G[roomType](...)
+end
+
+-- Resize game window
+function resize(s)
+    love.window.setMode(s*gw, s*gh)
+    sx, sy = s, s
 end
