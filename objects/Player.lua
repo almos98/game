@@ -37,12 +37,14 @@ function Player:update(dt)
     else
         self:walk(dx,dy)
     end
+
     self.currentAnimation = self.Animations[self.status]
     self.currentAnimation:update(dt)
 end
 
 function Player:draw()
-    self.currentAnimation:draw(self.sheet, self.x, self.y)
+    self.currentAnimation:draw(self.sheet, self.x-self.w/2, self.y-self.w/2)
+    love.graphics.rectangle('line', self.x-self.w/2, self.y-self.w/2, self.w, self.w)
 end
 
 function Player:walk(dx, dy)
