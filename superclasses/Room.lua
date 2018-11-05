@@ -42,6 +42,7 @@ function Room:draw()
     M.each(self.gameObjects, function(o)
         o:draw()
     end)
+    --self.world:draw()
 
     camera:detach()
     camera:draw()

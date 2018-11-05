@@ -17,23 +17,33 @@ function Player:new(room, x, y, opt)
     self.status = 'idle'
     self.speed = 100
     self.direction = 1
+
     self.w = 25
     self.controller:bind('a', 'left')
     self.controller:bind('s', 'down')
     self.controller:bind('d', 'right')
     self.controller:bind('w', 'up')
+
+    self.collider = self.room.world:newRectangleCollider(self.x, self.y+self.w/2, self.w, self.w/4)
+    self.collider:setObject(self) 
+    self.collider:setType('dynamic')
+    self.collider:setFixedRotation(true)
 end
 
 function Player:update(dt)
+    if self.timer then self.timer:update(dt) end
+    if self.collider then self.x, self.y = self.collider:getPosition() end
+    self.y = self.y - self.w/4
+
     local dx, dy = 0,0
     if self.controller:down('left') then dx = -self.speed end
     if self.controller:down('down') then dy = self.speed end
     if self.controller:down('right') then dx = self.speed end
     if self.controller:down('up') then dy = -self.speed end
 
-    dx,dy = dx*dt,dy*dt
     if (dx==0 and dy==0) then
         self.status = 'idle'
+        self:setVelocity(0,0)
     else
         self:walk(dx,dy)
     end
@@ -49,10 +59,10 @@ end
 
 function Player:walk(dx, dy)
     local direction = dx > 0 and 1 or dx < 0 and -1 or self.direction
-    print(self.direction, direction)
     if self.direction ~= direction then self:flipAnimations() end
+    
     self.status = 'walking'
-    self.x, self.y = self.x + dx, self.y + dy
+    self:setVelocity(dx,dy)
 end
 
 function Player:flipAnimations()
@@ -61,5 +71,10 @@ function Player:flipAnimations()
         o:flipH()
     end)
 end
+
+function Player:setVelocity(x,y)
+    self.collider:setLinearVelocity(x,y)
+end
+
 -------------
 return Player
