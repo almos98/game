@@ -17,7 +17,7 @@ local currentRoom
 ------------------
 
 function love.load(args)
-    -- Loading Rooms and Objects
+    util.requireFiles(util.recursiveEnumerate('superclasses'))
     util.requireFiles(util.recursiveEnumerate('objects'))
     util.requireFiles(util.recursiveEnumerate('rooms'))
 
