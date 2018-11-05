@@ -24,6 +24,9 @@ function love.load(args)
     input   = Input()
     timer   = Timer()
     camera  = Camera()
+
+    gw,gh = love.graphics.getDimensions()
+    sx,sy = 1,1
 end
 
 ---------------------
