@@ -9,6 +9,7 @@ Timer   = require 'libraries/EnhancedTimer'
 M       = require 'libraries/moses'
 Camera  = require 'libraries/Camera'
 Physics = require 'libraries/windfield'
+Anim    = require 'libraries/anim8'
 
 local currentRoom
 

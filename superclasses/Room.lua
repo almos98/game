@@ -42,7 +42,7 @@ function Room:draw()
 
     camera:detach()
     camera:draw()
-    
+
     graphics.setCanvas()
 
     graphics.setColor(1, 1, 1, 1)
