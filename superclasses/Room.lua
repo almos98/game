@@ -36,9 +36,12 @@ function Room:draw()
 
     camera:attach(0, 0, gw, gh)
 
-    for _, gameObject in next, self.gameObjects do
-        gameObject:draw()
-    end
+    self.gameObjects = M.sort(self.gameObjects, function(a,b)
+        return a.y < b.y
+    end)
+    M.each(self.gameObjects, function(o)
+        o:draw()
+    end)
 
     camera:detach()
     camera:draw()
