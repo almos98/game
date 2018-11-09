@@ -26,11 +26,13 @@ function love.load(args)
     love.graphics.setLineStyle('rough')
     resize(3)
 
+    love.physics.setMeter(32)
+
     input   = Input()
     timer   = Timer()
 
     camera  = Camera(200, 150, 400, 300)
-    camera:setFollowStyle("SCREEN_BY_SCREEN")
+    camera:setFollowStyle("TOPDOWN_TIGHT")
     camera:setFollowLerp(0.2)
     camera:setFollowLead(10)
 

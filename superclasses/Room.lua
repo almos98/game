@@ -35,7 +35,7 @@ function Room:draw()
     graphics.clear()
 
     camera:attach(0, 0, gw, gh)
-
+    if self.map then self.map:draw() end
     self.gameObjects = M.sort(self.gameObjects, function(a,b)
         return a.y < b.y
     end)
@@ -115,5 +115,9 @@ function Room:getClosestGameObject(x, y, radius, classes)
     return closest
 end
 
+function Room:setMap(path)
+    self.map = TiledMap:new(path)
+    print(self.map)
+end
 -----------------
 return Room
