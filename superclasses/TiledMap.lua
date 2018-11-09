@@ -12,7 +12,7 @@ end
 local function parseCollisionTables(tiles)
     local collisions = {}
 
-    M.each(tiles, function(tile)
+    M.each(tiles, function(tile,i)
         local collision = {}
         local object = tile.objectGroup.objects[1]
 
@@ -35,7 +35,9 @@ local function parseCollisionTables(tiles)
             return
         end
 
-        collision[tile.id+1] = t
+        if object.shape ~= "polygon" then
+            collisions[tile.id+1] = collision
+        end
     end)
 
     return collisions
@@ -62,8 +64,32 @@ local function buildQuadsTable(tileset)
 end
 
 local function buildCollisions(room, map, collisionTables)
-    M.each(map.layers, function(layer)
-        
+    M.each(map.layers, function(layer, i)
+        for y = 0, layer.height - 1 do
+            for x = 0, layer.width - 1 do
+                local index = (x + y * layer.width) + 1
+                local tileId = layer.data[index]
+                local collision = collisionTables[tileId]
+
+                if collision ~= nil then
+                    local xx = x * map.tilewidth
+                    local yy = y * map.tileheight
+
+                    local axis = true
+                    local transformed = M.map(collision.vertices, function(v)
+                        local t = axis and v + xx
+                                        or v + yy
+
+                        axis = not axis
+                        return t
+                    end)
+                    
+                    pprint(transformed)
+                    local collider = room.world:newPolygonCollider(transformed)
+                    collider:setType('static')
+                end
+            end
+        end
     end)
 end
 
