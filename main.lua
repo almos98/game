@@ -10,6 +10,7 @@ M       = require 'libraries/moses'
 Camera  = require 'libraries/Camera'
 Physics = require 'libraries/windfield'
 Anim    = require 'libraries/anim8'
+pprint  = require 'libraries/pprint'
 
 local currentRoom
 
@@ -18,6 +19,8 @@ local currentRoom
 ------------------
 
 function love.load(args)
+    debug = (args[1] == "--debug" or args[1] == '-d') and function (...) print(unpack({...})) end or function() end
+
     util.requireFiles(util.recursiveEnumerate('superclasses'))
     util.requireFiles(util.recursiveEnumerate('objects'))
     util.requireFiles(util.recursiveEnumerate('rooms'))

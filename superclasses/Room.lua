@@ -42,7 +42,7 @@ function Room:draw()
     M.each(self.gameObjects, function(o)
         o:draw()
     end)
-    --self.world:draw()
+    self.world:draw()
 
     camera:detach()
     camera:draw()
@@ -61,6 +61,10 @@ end
 
 function Room:addPhysicsWorld()
     self.world = Physics.newWorld(0,0,true)
+end
+
+function Room:setMap(path)
+    self.map = TiledMap:new(self, path)
 end
 
 function Room:destroy()
@@ -115,9 +119,5 @@ function Room:getClosestGameObject(x, y, radius, classes)
     return closest
 end
 
-function Room:setMap(path)
-    self.map = TiledMap:new(path)
-    print(self.map)
-end
 -----------------
 return Room
