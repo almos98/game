@@ -122,6 +122,42 @@ return {
           }
         },
         {
+          id = 35,
+          objectGroup = {
+            type = "objectgroup",
+            name = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            draworder = "index",
+            properties = {},
+            objects = {
+              {
+                id = 2,
+                name = "",
+                type = "",
+                shape = "polygon",
+                x = 13.776,
+                y = 14.448,
+                width = 0,
+                height = 0,
+                rotation = 0,
+                visible = true,
+                polygon = {
+                  { x = 0, y = 0 },
+                  { x = 18.1439, y = -0.167999 },
+                  { x = 18.4799, y = 7.05598 },
+                  { x = 8.39997, y = 7.05598 },
+                  { x = 8.39997, y = 16.9679 },
+                  { x = 0, y = 17.1359 }
+                },
+                properties = {}
+              }
+            }
+          }
+        },
+        {
           id = 36,
           objectGroup = {
             type = "objectgroup",
@@ -134,23 +170,23 @@ return {
             properties = {},
             objects = {
               {
-                id = 1,
+                id = 2,
                 name = "",
                 type = "",
                 shape = "polygon",
-                x = 0.264385,
-                y = 21.9439,
+                x = 0.176256,
+                y = 13.4836,
                 width = 0,
                 height = 0,
                 rotation = 0,
                 visible = true,
                 polygon = {
-                  { x = -0.264385, y = 0 },
-                  { x = 12.6023, y = 0.0881282 },
-                  { x = 12.6023, y = 10.0466 },
-                  { x = 21.7677, y = 10.0466 },
-                  { x = 21.7677, y = -8.90095 },
-                  { x = -0.352513, y = -8.81282 }
+                  { x = 0, y = 0 },
+                  { x = 21.5914, y = -0.176256 },
+                  { x = 21.7677, y = 18.5951 },
+                  { x = 12.7786, y = 18.5951 },
+                  { x = 12.7786, y = 8.37218 },
+                  { x = 0, y = 8.46031 }
                 },
                 properties = {}
               }
@@ -180,6 +216,78 @@ return {
                 height = 7.67788,
                 rotation = 0,
                 visible = true,
+                properties = {}
+              }
+            }
+          }
+        },
+        {
+          id = 43,
+          objectGroup = {
+            type = "objectgroup",
+            name = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            draworder = "index",
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "polygon",
+                x = 14.112,
+                y = 0.335999,
+                width = 0,
+                height = 0,
+                rotation = 0,
+                visible = true,
+                polygon = {
+                  { x = 0, y = 0 },
+                  { x = 7.72798, y = -0.167999 },
+                  { x = 7.55998, y = 11.76 },
+                  { x = 17.9759, y = 12.096 },
+                  { x = 17.6399, y = 21.3359 },
+                  { x = -0.503998, y = 20.8319 }
+                },
+                properties = {}
+              }
+            }
+          }
+        },
+        {
+          id = 44,
+          objectGroup = {
+            type = "objectgroup",
+            name = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            draworder = "index",
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "polygon",
+                x = 0,
+                y = 13.104,
+                width = 0,
+                height = 0,
+                rotation = 0,
+                visible = true,
+                polygon = {
+                  { x = 0, y = 0 },
+                  { x = 13.44, y = 0.167999 },
+                  { x = 13.272, y = -13.104 },
+                  { x = 21.8399, y = -12.936 },
+                  { x = 22.0079, y = 8.73597 },
+                  { x = 0.167999, y = 8.73597 }
+                },
                 properties = {}
               }
             }

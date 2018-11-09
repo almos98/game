@@ -5,8 +5,7 @@ TiledMap = Object:extend()
 ---------------------
 
 local function insertVertex(t, x, y)
-    table.insert(t, x)
-    table.insert(t, y)
+    table.insert(t, {x,y})
 end
 
 local function parseCollisionTables(tiles)
@@ -29,15 +28,15 @@ local function parseCollisionTables(tiles)
             insertVertex(collision.vertices, x+w, y+h)
             insertVertex(collision.vertices, x, y+h)
         elseif object.shape == "polygon" then
-            
+            M.each(object.polygon, function(v,i)
+                insertVertex(collision.vertices, v.x+object.x, v.y+object.y)
+            end)
         else
             debug(("unsupported shape %s"):format(object.shape))
             return
         end
 
-        if object.shape ~= "polygon" then
-            collisions[tile.id+1] = collision
-        end
+        collisions[tile.id+1] = collision
     end)
 
     return collisions
@@ -63,6 +62,15 @@ local function buildQuadsTable(tileset)
     return quads
 end
 
+local function polygonFromLines(world, vertices)
+    local first = vertices[1]
+    local last = vertices[#vertices]
+    M.each(vertices, function(v,i)
+        local nextV = v == last and first or vertices[i+1]
+        world:newLineCollider(v[1],v[2],nextV[1],nextV[2]):setType('static')
+    end)
+end
+
 local function buildCollisions(room, map, collisionTables)
     M.each(map.layers, function(layer, i)
         for y = 0, layer.height - 1 do
@@ -75,18 +83,16 @@ local function buildCollisions(room, map, collisionTables)
                     local xx = x * map.tilewidth
                     local yy = y * map.tileheight
 
-                    local axis = true
                     local transformed = M.map(collision.vertices, function(v)
-                        local t = axis and v + xx
-                                        or v + yy
-
-                        axis = not axis
+                        t = {
+                            v[1] + xx,
+                            v[2] + yy,
+                        }
+                        
                         return t
                     end)
                     
-                    pprint(transformed)
-                    local collider = room.world:newPolygonCollider(transformed)
-                    collider:setType('static')
+                    polygonFromLines(room.world, transformed)
                 end
             end
         end
