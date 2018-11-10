@@ -1,3 +1,5 @@
+log.info("Map loaded into memory")
+
 return {
   version = "1.2",
   luaversion = "5.1",

@@ -32,10 +32,11 @@ local function parseCollisionTables(tiles)
                 insertVertex(collision.vertices, v.x+object.x, v.y+object.y)
             end)
         else
-            debug(("unsupported shape %s"):format(object.shape))
+            log.warn("unsupported shape %s", object.shape)
             return
         end
 
+        log.debug("Collision box of shape %s with vertices:\n%s", collision.shape, util.toString(collision.vertices))
         collisions[tile.id+1] = collision
     end)
 
@@ -68,6 +69,7 @@ local function polygonFromLines(world, vertices)
     M.each(vertices, function(v,i)
         local nextV = v == last and first or vertices[i+1]
         world:newLineCollider(v[1],v[2],nextV[1],nextV[2]):setType('static')
+        log.debug('Line collider from (%d, %d) to (%d, %d)', v[1], v[2], nextV[1], nextV[2])
     end)
 end
 
@@ -109,8 +111,13 @@ function TiledMap:new(room, path)
     self.tileset = self.map.tilesets[1]
     self.image = love.graphics.newImage('media/'..self.tileset.image)
 
+    log.info("Building collision tables.")
     local collisionTables = parseCollisionTables(self.tileset.tiles)
+
+    log.info("Building quad tables.")
     self.quads = buildQuadsTable(self.tileset)
+
+    log.info("Building collisions from map.")
     buildCollisions(room, self.map, collisionTables)
 
     return self

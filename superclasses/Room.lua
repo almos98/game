@@ -7,8 +7,12 @@ local graphics = love.graphics
 function Room:new(canvasDimensions)
     local canvasDimensions = canvasDimensions or M.pack(gw, gh)
 
+    self.name = "Room"
+
     self.gameObjects = {}
     self.mainCanvas = graphics.newCanvas(unpack(canvasDimensions))
+
+    log.info("Superclass %s initialised.", self)
 end
 
 ---------------------
@@ -23,6 +27,7 @@ function Room:update(dt)
         if gameObject.dead then
             gameObject:destroy()
             table.remove(self.gameObjects, i)
+            log.info("Removing dead object %s", gameObject)
         end
     end
 end
@@ -42,7 +47,7 @@ function Room:draw()
     M.each(self.gameObjects, function(o)
         o:draw()
     end)
-    self.world:draw()
+    --self.world:draw()
 
     camera:detach()
     camera:draw()
@@ -59,12 +64,18 @@ end
 -- Class Methods --
 -------------------
 
+function Room:__tostring()
+    return self.name
+end
+
 function Room:addPhysicsWorld()
     self.world = Physics.newWorld(0,0,true)
+    log.info("Created new physics world for room %s", self)
 end
 
 function Room:setMap(path)
     self.map = TiledMap:new(self, path)
+    log.info("Loaded new map from '%s' to room %s", path, self)
 end
 
 function Room:destroy()
@@ -79,6 +90,8 @@ function Room:destroy()
         self.world:destroy()
         self.world = nil
     end
+
+    log.info("Room %s cleaned up", self)
 end
 
 function Room:addGameObject(gameObjectType, x, y, opts)
@@ -86,6 +99,7 @@ function Room:addGameObject(gameObjectType, x, y, opts)
     local gameObject = _G[gameObjectType](self, x, y, opts)
     table.insert(self.gameObjects, gameObject)
 
+    log.info("Added new GameObject %s to room %s", gameObject, self)
     return gameObject
 end
 
@@ -93,6 +107,7 @@ function Room:getGameObjects(fn)
     if fn then
         return M.select(self.gameObjects, fn)
     end
+    
     return self.gameObjects
 end
 

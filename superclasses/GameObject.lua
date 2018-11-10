@@ -14,6 +14,8 @@ function GameObject:new(room, x, y, opts)
 
     self.name = self.name or "GameObject"
     self.id = M.uniqueId()
+
+    log.info("Created GameObject with id %d.", self.id)
 end
 
 ---------------------

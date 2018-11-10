@@ -10,26 +10,36 @@ M       = require 'libraries/moses'
 Camera  = require 'libraries/Camera'
 Physics = require 'libraries/windfield'
 Anim    = require 'libraries/anim8'
-pprint  = require 'libraries/pprint'
+log     = require 'libraries/log'
 
 local currentRoom
+
+local debug_levels = {"trace", "debug", "info", "warn", "error", "fatal"}
 
 ------------------
 -- Game Loading --
 ------------------
 
 function love.load(args)
-    debug = (args[1] == "--debug" or args[1] == '-d') and function (...) print(unpack({...})) end or function() end
+    local dLevel = 4
+    if args[1] == "-d" then
+        dLevel = tonumber(args[2]) or 2
+    end
+    log.level = debug_levels[dLevel]
 
     util.requireFiles(util.recursiveEnumerate('superclasses'))
     util.requireFiles(util.recursiveEnumerate('objects'))
     util.requireFiles(util.recursiveEnumerate('rooms'))
+
+    log.info("Loaded game files okay.")
 
     love.graphics.setDefaultFilter('nearest')
     love.graphics.setLineStyle('rough')
     resize(3)
 
     love.physics.setMeter(32)
+
+    log.info("Pixelized.")
 
     input   = Input()
     timer   = Timer()
@@ -39,8 +49,13 @@ function love.load(args)
     camera:setFollowLerp(0.2)
     camera:setFollowLead(10)
 
+    log.info("Camera loaded")
+    log.info("Loading game")
+
     gotoRoom('Stage')
     player = currentRoom:getGameObjects(function(o) return o:is(Player) end)[1]
+
+    log.info("Game loaded")
 end
 
 ---------------------
@@ -54,14 +69,26 @@ function love.update(dt)
     if currentRoom then
         currentRoom:update(dt)
     end
+
+    log.trace("Game updated with delta time of %f.", dt)
 end
 
 ------------------------
 -- Rendering Callback --
 ------------------------
+local frameCount = 0
+
 function love.draw()
     if currentRoom then
         currentRoom:draw()
+    end
+
+    log.trace("Game frame %d rendered.", frameCount)
+    frameCount = frameCount + 1
+
+    -- Possibly never going to be called.
+    if frameCount < 0 then
+        log.warn("Frame count overflow.")
     end
 end
 
@@ -76,6 +103,7 @@ end
 
 -- Resize game window
 function resize(s)
+    log.info("Changed render scale to %d.", s)
     love.window.setMode(s*gw, s*gh)
     sx, sy = s, s
 end
