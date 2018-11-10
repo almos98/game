@@ -1,5 +1,3 @@
-log.info("Map loaded into memory")
-
 return {
   version = "1.2",
   luaversion = "5.1",
@@ -10,8 +8,8 @@ return {
   height = 10,
   tilewidth = 32,
   tileheight = 32,
-  nextlayerid = 3,
-  nextobjectid = 1,
+  nextlayerid = 5,
+  nextobjectid = 10,
   properties = {},
   tilesets = {
     {
@@ -296,6 +294,54 @@ return {
           }
         }
       }
+    },
+    {
+      name = "campfire",
+      firstgid = 49,
+      filename = "campfire.tsx",
+      tilewidth = 16,
+      tileheight = 16,
+      spacing = 0,
+      margin = 0,
+      columns = 4,
+      image = "campfire_16x16.png",
+      imagewidth = 64,
+      imageheight = 16,
+      tileoffset = {
+        x = 0,
+        y = 0
+      },
+      grid = {
+        orientation = "orthogonal",
+        width = 16,
+        height = 16
+      },
+      properties = {},
+      terrains = {},
+      tilecount = 4,
+      tiles = {
+        {
+          id = 0,
+          animation = {
+            {
+              tileid = 0,
+              duration = 100
+            },
+            {
+              tileid = 1,
+              duration = 100
+            },
+            {
+              tileid = 2,
+              duration = 100
+            },
+            {
+              tileid = 3,
+              duration = 100
+            }
+          }
+        }
+      }
     }
   },
   layers = {
@@ -351,6 +397,33 @@ return {
         35, 0, 0, 0, 0, 0, 0, 0, 0, 33,
         35, 0, 0, 0, 0, 0, 0, 0, 0, 33,
         44, 26, 26, 26, 26, 26, 26, 26, 26, 45
+      }
+    },
+    {
+      type = "objectgroup",
+      id = 4,
+      name = "Objects",
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      draworder = "topdown",
+      properties = {},
+      objects = {
+        {
+          id = 9,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 133.927,
+          y = 126.924,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          gid = 49,
+          visible = true,
+          properties = {}
+        }
       }
     }
   }
