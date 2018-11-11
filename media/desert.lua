@@ -322,6 +322,9 @@ return {
       tiles = {
         {
           id = 0,
+          properties = {
+            ["className"] = "Campfire"
+          },
           objectGroup = {
             type = "objectgroup",
             name = "",

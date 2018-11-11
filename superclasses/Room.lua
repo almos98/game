@@ -74,6 +74,16 @@ function Room:addPhysicsWorld()
     log.info("Created new physics world for room %s", self)
 end
 
+function Room:polygonColliderFromLines(vertices, collisionType)
+    local collisionType = collisionType or 'static'
+    local first = vertices[1]
+    local last  = vertices[#vertices]
+    M.each(vertices, function(v,i)
+        local vNext = v == last and first or vertices[i+1]
+        self.world:newLineCollider(v[1],v[2], vNext[1],vNext[2]):setType(collisionType)
+    end)
+end
+
 function Room:setMap(path)
     self.map = TiledMap:new(self, path)
     log.info("Loaded new map from '%s' to room %s", path, self)

@@ -54,7 +54,7 @@ end
 
 function Player:draw()
     self.currentAnimation:draw(self.sheet, self.x-self.w/2, self.y-self.w/2)
-    love.graphics.rectangle('line', self.x-self.w/2, self.y-self.w/2, self.w, self.w)
+    --love.graphics.rectangle('line', self.x-self.w/2, self.y-self.w/2, self.w, self.w)
 end
 
 function Player:walk(dx, dy)
