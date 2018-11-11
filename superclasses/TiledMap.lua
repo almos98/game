@@ -149,7 +149,7 @@ function TiledMap:parseTilesets()
                 )
 
                 local x, y = parseGridRange(tile.animation, tileset.columns)
-                self.animations[id] = Anim.newAnimation(grid(x,y), tile.animation[1].duration/1000)
+                self.animations[id] = Anim.newAnimation(grid(x,y), tile.animation[1].duration/500)
             end
         end)
     end)
