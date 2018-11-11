@@ -202,7 +202,25 @@ function TiledMap:load(room, collisions)
                 end
             end
         elseif layer.type == "objectgroup" then
-            --Create objects here
+            M.each(layer.objects, function(obj)
+                local id = obj.gid
+                local opts = {}
+
+                local quad = self.quads[id]
+                opts.image = quad.image
+                if self.animations[id] then
+                    opts.animation = self.animations[id]
+                else
+                    opts.quad = quad.quad
+                end
+
+                if collisions[id] then
+                    opts.collision = collisions[id]
+                end
+
+                opts.w, opts.h = obj.width, obj.height
+                room:addGameObject(self.classes[id], obj.x+opts.w/2, obj.y+opts.h/2, opts)
+            end)
         end
     end)
 end
