@@ -21,6 +21,7 @@ end
 function Room:update(dt)
     if self.world then self.world:update(dt) end
 
+    if self.map then self.map:update(dt) end
     for i = #self.gameObjects, 1, -1 do
         local gameObject = self.gameObjects[i]
         gameObject:update(dt)
