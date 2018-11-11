@@ -145,6 +145,24 @@ local function buildCollisions(room, map, collisionTables)
                     end
                 end
             end
+        elseif layer.type == 'objectgroup' then
+            M.each(layer.objects, function(obj)
+                local collision = collisionTables[obj.gid]
+
+                if collision ~= nil then
+                    local x,y = obj.x, obj.y
+                    local transformed = M.map(collision.vertices, function(v)
+                        t = {
+                            v[1] + x,
+                            v[2] + y
+                        }
+
+                        return t
+                    end)
+
+                    polygonFromLines(room.world, transformed)
+                end
+            end)
         end
     end)
 end
