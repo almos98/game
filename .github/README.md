@@ -1,5 +1,5 @@
 # game
-My entry for Github Game Off 2018.
+My entry for Github Game Off 2018. Not an actual game but I did learn a lot from doing this.
 
 ## Libraries
 - OOP: [rxi/classic](https://github.com/rxi/classic)
