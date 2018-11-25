@@ -13,7 +13,7 @@ function Stage:new()
     --     self:addGameObject('Box', love.math.random(-1000, 1000), love.math.random(-1000,1000), {tw=50, th=20, z=5})
     -- end
 
-    self:setMap('media/desert')
+    self:setMap('resources/maps/desert')
 end
 
 ------------

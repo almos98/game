@@ -23,6 +23,7 @@ local debug_levels = {"trace", "debug", "info", "warn", "error", "fatal"}
 function love.load(args)
     local dLevel = 4
     if args[1] == "-d" then
+        debugging = true
         dLevel = tonumber(args[2]) or 2
     end
     log.level = debug_levels[dLevel]
@@ -55,6 +56,7 @@ function love.load(args)
     gotoRoom('Stage')
     player = currentRoom:getGameObjects(function(o) return o:is(Player) end)[1]
 
+    log.info("%s", {test=12})
     log.info("Game loaded")
 end
 

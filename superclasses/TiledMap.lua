@@ -69,7 +69,7 @@ function TiledMap:new(room, path)
 
     self.tilesets = self.map.tilesets
     for _, tileset in next, self.tilesets do
-        tileset.image = love.graphics.newImage('media/'..tileset.image)
+        tileset.image = love.graphics.newImage('resources/maps/images/'..tileset.image)
     end
 
     log.info("Parsing tilesets into collisions, animations and classes.")

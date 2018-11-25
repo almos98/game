@@ -1,94 +1,121 @@
---
--- log.lua
---
--- Copyright (c) 2016 rxi
---
--- This library is free software; you can redistribute it and/or modify it
--- under the terms of the MIT license. See LICENSE for details.
---
+local log = {}
 
-local log = { _version = "0.1.0" }
-
-log.usecolor = true
-log.outfile = nil
+log.colors = true
+log.file = nil
+log.redirectToFile = false
 log.level = "trace"
 
-
 local modes = {
-  { name = "trace", color = "\27[34m", },
-  { name = "debug", color = "\27[36m", },
-  { name = "info",  color = "\27[32m", },
-  { name = "warn",  color = "\27[33m", },
-  { name = "error", color = "\27[31m", },
-  { name = "fatal", color = "\27[35m", },
+    {name = "trace", color = "\27[34m"},
+    {name = "debug", color = "\27[36m"},
+    {name = "info",  color = "\27[32m"},
+    {name = "warn",  color = "\27[33m"},
+    {name = "error", color = "\27[31m"},
+    {name = "fatal", color = "\27[35m"},
 }
 
-
 local levels = {}
-for i, v in ipairs(modes) do
-  levels[v.name] = i
+for i, v in next, modes do
+    levels[v.name] = i
 end
 
-
-local round = function(x, increment)
-  increment = increment or 1
-  x = x / increment
-  return (x > 0 and math.floor(x + .5) or math.ceil(x - .5)) * increment
+function log.setLevel(d)
+    log.level = modes[d].name
 end
 
+local seen = {}
 
-local _tostring = tostring
+-- Convert to string
+local function toString(x, q)
+    local q = q or false
+    if type(x) == 'nil' then
+        return "'nil'"
+    elseif type(x) == 'boolean' then
+        return x and "'true'" or "'false'"
+    elseif type(x) == "number" then
+        return string.format("%g", x)
+    elseif type(x) == "string" then
+        if q then
+            return '"' .. x .. '"'
+        end
+        return x
+    elseif type(x) == "function" then
+        return tostring(x)
+    elseif type(x) == "table" then
+        if not tostring(x):match("^table: ") then
+            return tostring(x)
+        end
 
-local tostring = function(...)
-  local t = {}
-  for i = 1, select('#', ...) do
-    local x = select(i, ...)
-    if type(x) == "number" then
-      x = round(x, .01)
+        local contents = {}
+        if not seen[x] then
+            seen[x] = true
+
+            for i, v in next, x do
+                local str = ""
+                if type(i) ~= 'number' then
+                    str = str .. toString(i) .. "="
+                end
+                local append = toString(v, true)
+                if append then
+                    str = str .. append
+                end
+                table.insert(contents, str)
+            end
+        end
+
+        return "{" .. table.concat(contents, ", ") .. "}"
     end
-    t[#t + 1] = _tostring(x)
-  end
-  return table.concat(t, " ")
 end
 
-
-for i, x in ipairs(modes) do
-  local nameupper = x.name:upper()
-  log[x.name] = function(...)
-    
-    -- Return early if we're below the log level
-    if i < levels[log.level] then
-      return
+-- Message from arguments
+local function message(...)
+    seen = {}
+    local res = {}
+    for i = 2, select('#', ...) do
+        local x = select(i, ...)
+        table.insert(res, toString(x))
     end
-
-    local args = {...}
-    local str = args[1]
-    table.remove(args, 1)
-
-    local msg = string.format(str, unpack(args))
-    local info = debug.getinfo(2, "Sl")
-    local lineinfo = info.short_src .. ":" .. info.currentline
-
-    -- Output to console
-    print(string.format("%s[%-6s%s]%s %s: %s",
-                        log.usecolor and x.color or "",
-                        nameupper,
-                        os.date("%H:%M:%S"),
-                        log.usecolor and "\27[0m" or "",
-                        lineinfo,
-                        msg))
-
-    -- Output to log file
-    if log.outfile then
-      local fp = io.open(log.outfile, "a")
-      local str = string.format("[%-6s%s] %s: %s\n",
-                                nameupper, os.date(), lineinfo, msg)
-      fp:write(str)
-      fp:close()
-    end
-
-  end
+    return string.format(select(1, ...), unpack(res))
 end
 
+-- Defining the message functions
+for i, mode in next, modes do
+    log[mode.name] = function(...)
+        -- Return early if below log level
+        if i < levels[log.level] then
+            return
+        end
+
+        local msg = message(...)
+
+        local info = debug.getinfo(2, "Sl")
+        local lineinfo = info.short_src .. ":" .. info.currentline
+
+        -- Writing to terminal
+        if not log.redirectToFile then
+            print(("%s[%-6s%s]%s %s: %s"):format(
+                log.colors and mode.color or "",
+                mode.name:upper(),
+                os.date("%H:%M:%S"),
+                log.colors and "\27[0m" or "",
+                lineinfo,
+                msg
+            ))
+        end
+
+        -- Writing to a file
+        if log.file then
+            local f = io.open(log.file, "a")
+            
+            f:write(("[%-6s%s] %s: %s\n"):format(
+                mode.name:upper(),
+                os.date(),
+                lineinfo,
+                msg
+            ))
+            f:close()
+        end
+    end
+end
 
 return log

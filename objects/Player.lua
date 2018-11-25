@@ -7,24 +7,25 @@ function Player:new(room, x, y, opt)
         self.controller = input
     end
     
-    self.sheet = love.graphics.newImage('media/spritesheet.png')
-    self.g = Anim.newGrid(23,23, 121,25, 0,0, 1)
+    self.sheet = love.graphics.newImage('resources/character/male/character_spritesheet.png')
+    self.g = Anim.newGrid(41,41, 303,45, 0,0,2)
     self.Animations = {
         idle = Anim.newAnimation(self.g(1,1),2),
-        walking = Anim.newAnimation(self.g('2-4', 1), 0.1),
+        walking = Anim.newAnimation(self.g('2-7',1), 0.1),
     }
 
     self.status = 'idle'
     self.speed = 100
     self.direction = 1
 
-    self.w = 25
+    self.h = 43
+    self.w = 43
     self.controller:bind('a', 'left')
     self.controller:bind('s', 'down')
     self.controller:bind('d', 'right')
     self.controller:bind('w', 'up')
 
-    self.collider = self.room.world:newRectangleCollider(self.x, self.y+self.w/2, self.w, self.w/4)
+    self.collider = self.room.world:newRectangleCollider(self.x, self.y, self.w/4, self.h/8)
     self.collider:setObject(self) 
     self.collider:setType('dynamic')
     self.collider:setFixedRotation(true)
@@ -53,7 +54,7 @@ function Player:update(dt)
 end
 
 function Player:draw()
-    self.currentAnimation:draw(self.sheet, self.x-self.w/2, self.y-self.w/2)
+    self.currentAnimation:draw(self.sheet, self.x-self.w/2, self.y-self.h/8*5)
     --love.graphics.rectangle('line', self.x-self.w/2, self.y-self.w/2, self.w, self.w)
 end
 
